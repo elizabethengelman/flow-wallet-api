@@ -59,6 +59,7 @@ services:
       - private
     ports:
       - "3569:3569"
+      - "8888:8888"
 
   api:
     build:
