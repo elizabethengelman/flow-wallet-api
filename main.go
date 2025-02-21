@@ -196,6 +196,9 @@ func runServer(cfg *configs.Config) {
 	rv.Handle("/accounts", accountHandler.Create()).Methods(http.MethodPost)           // create
 	rv.Handle("/accounts/{address}", accountHandler.Details()).Methods(http.MethodGet) // details
 
+	// TEMP GENERATE KV PAIR
+	rv.Handle("/generate", accountHandler.GenerateKVPair()).Methods(http.MethodGet)              // list
+
 	// Account raw transactions
 	if !cfg.DisableRawTransactions {
 		rv.Handle("/accounts/{address}/sign", transactionHandler.Sign()).Methods(http.MethodPost)                           // sign

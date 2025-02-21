@@ -56,6 +56,17 @@ func (s *Accounts) CreateFunc(rw http.ResponseWriter, r *http.Request) {
 	handleJsonResponse(rw, http.StatusCreated, res)
 }
 
+func (s *Accounts) GenerateFunc(rw http.ResponseWriter, r *http.Request) {
+	k, err := s.service.GenerateKVPair(r.Context())
+
+	if err != nil {
+		handleError(rw, r, err)
+		return
+	}
+
+	handleJsonResponse(rw, http.StatusCreated, map[string]string{"status": "ok", "key": k})
+}
+
 // Details returns details regarding an account.
 // It reads the address for the wanted account from URL.
 // Account service is responsible for validating the address.
