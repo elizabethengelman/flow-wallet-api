@@ -28,6 +28,7 @@ const maxGasLimit = 9999
 type Service interface {
 	List(limit, offset int) (result []Account, err error)
 	Create(ctx context.Context, sync bool) (*jobs.Job, *Account, error)
+	GenerateKVPair(ctx context.Context) (string, error)
 	AddNonCustodialAccount(address string) (*Account, error)
 	DeleteNonCustodialAccount(address string) error
 	SyncAccountKeyCount(ctx context.Context, address flow.Address) (*jobs.Job, error)
@@ -80,6 +81,53 @@ func NewService(
 func (s *ServiceImpl) List(limit, offset int) (result []Account, err error) {
 	o := datastore.ParseListOptions(limit, offset)
 	return s.store.Accounts(o)
+}
+
+// Just for testing....
+// just doing this so we can have some KV pairs in the database.
+func (s *ServiceImpl) GenerateKVPair(ctx context.Context) (string, error) {
+	account := &Account{Type: AccountTypeCustodial}
+
+	// Generate a new key pair
+	accountKey, newPrivateKey, err := s.km.GenerateDefault(ctx)
+	fmt.Printf("========> THE PRIVATE KEY: %v", newPrivateKey)
+	if err != nil {
+		return "", err
+	}
+
+	// Public keys for creating the account
+	publicKeys := []*flow.AccountKey{}
+
+	// Create copies based on the configured key count, changing just the index
+	for i := 0; i < int(s.cfg.DefaultAccountKeyCount); i++ {
+		clonedAccountKey := *accountKey
+		clonedAccountKey.Index = i
+
+		publicKeys = append(publicKeys, &clonedAccountKey)
+	}
+
+	// Convert the key to storable form (encrypt it)
+	encryptedAccountKey, err := s.km.Save(*newPrivateKey)
+	if err != nil {
+		return "", err
+	}
+	encryptedAccountKey.PublicKey = accountKey.PublicKey.String()
+
+	// Store account and key(s)
+	// Looping through accountKeys to get the correct Index values
+	storableKeys := []keys.Storable{}
+	for _, pbk := range publicKeys {
+		clonedEncryptedAccountKey := encryptedAccountKey
+		clonedEncryptedAccountKey.Index = pbk.Index
+		storableKeys = append(storableKeys, clonedEncryptedAccountKey)
+	}
+
+	account.Keys = storableKeys
+	if err := s.store.InsertAccount(account); err != nil {
+		return "", err
+	}
+
+	return newPrivateKey.Value, nil
 }
 
 // Create calls account.New to generate a new account.

@@ -1,0 +1,26 @@
+{
+	"contracts": {
+		"Counter": {
+			"source": "cadence/contracts/Counter.cdc",
+			"aliases": {
+				"testing": "0000000000000007"
+			}
+		}
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testing": "127.0.0.1:3569",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "bc075f150b041e732625a60e94cb15ac1cafa8510c2a44d09d76ff5165df2b7b"
+		},
+		"t": {
+			"address": "fd43f9148d4b725d",
+			"key": "c1e3479116e3f515de37b3331826cb0ca2c46799faff2677b7729ef0c736db78"
+		}
+	}
+}

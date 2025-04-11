@@ -1,0 +1,2 @@
+- starting from scratch, just to step through this more intentionally 
+- this is a separate binary from the original flow-wallet-api that uses an up-to-date flow-go-sdk version and works outside of flow-wallet-api 

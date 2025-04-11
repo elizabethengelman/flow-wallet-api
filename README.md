@@ -5,7 +5,7 @@ This is a fork of [flow-hydraulics/flow-wallet-api](https://github.com/flow-hydr
 
 1. It is recommended to run the `flow-wallet-api` locally via Docker Compose, so make sure you've installed Docker and Docker Compose. You can install both by downloading [Docker Desktop](https://docs.docker.com/get-docker/).
 1. Create a `.env` config file and copy the contents of `.env.numero.example` into it: `cp .env.numero.example .env`
-1. Start the Wallet API, Flow Emulator, Postgres DB and Redis from docker-compose, and make sure to pass our specify to use our custom `docker-compose.numero.yml` file:
+1. Start the Wallet API, Flow Emulator, Postgres DB and Redis from docker-compose, and make sure to specify our custom `docker-compose.numero.yml` file:
 `docker-compose -f docker-compose.numero.yml up`
 
     * The first time you run this command, it will take a while because it needs to pull the necessary docker images.
